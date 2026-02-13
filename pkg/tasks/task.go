@@ -70,3 +70,18 @@ func CompleteTask(id int) error {
 	}
 	return errors.New("task not found")
 }
+
+func DeleteTask(id int) ([]Task, error) {
+	tasks, err := LoadTasks()
+	if err != nil {
+		return []Task{}, errors.New("Error while loading the task")
+	}
+	for i := range tasks {
+		if tasks[i].ID == id {
+			tasks = append(tasks[:i], tasks[i+1:]...)
+			SaveTasks(tasks)
+			return tasks, nil
+		}
+	}
+	return []Task{}, errors.New("Particular task not found")
+}
